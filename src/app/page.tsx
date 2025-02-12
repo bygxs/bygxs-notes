@@ -1,9 +1,8 @@
 // app/page.tsx
 "use client";
 import { useState } from "react";
-import { FiPlus, FiSearch, FiMoon, FiSun, FiX } from "react-icons/fi";
+import { FiPlus, FiSearch, FiMoon, FiSun, FiX, FiTrash2 } from "react-icons/fi";
 
-// Define the structure of a note
 interface Note {
   id: number;
   title: string;
@@ -11,30 +10,19 @@ interface Note {
 }
 
 export default function Home() {
-  // State for dark mode
   const [darkMode, setDarkMode] = useState(false);
-
-  // State for notes
   const [notes, setNotes] = useState<Note[]>([
     { id: 1, title: "First Note", content: "This is the first note." },
     { id: 2, title: "Second Note", content: "This is the second note." },
   ]);
-
-  // State for search query
   const [searchQuery, setSearchQuery] = useState("");
-
-  // State for modal visibility
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  // State for new note
   const [newNote, setNewNote] = useState({ title: "", content: "" });
 
-  // Filter notes based on search query
   const filteredNotes = notes.filter((note) =>
     note.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Function to add a new note
   const addNote = () => {
     if (newNote.title && newNote.content) {
       setNotes([...notes, { id: Date.now(), ...newNote }]);
@@ -43,21 +31,21 @@ export default function Home() {
     }
   };
 
+  const deleteNote = (id: number) => {
+    setNotes(notes.filter(note => note.id !== id));
+  };
+
   return (
     <div className={`min-h-screen ${darkMode ? "bg-gray-900 text-white" : "bg-gray-100"}`}>
-      {/* Top Navigation */}
       <nav className="flex justify-between items-center p-4">
         <h1 className="text-2xl font-bold">NoteApp</h1>
         <div className="flex items-center space-x-4">
-          {/* Dark/Light Mode Toggle */}
           <button
             onClick={() => setDarkMode(!darkMode)}
             className="p-2 rounded-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700"
           >
             {darkMode ? <FiSun size={20} /> : <FiMoon size={20} />}
           </button>
-
-          {/* User Avatar */}
           <div className="w-10 h-10 bg-gray-300 rounded-full overflow-hidden cursor-pointer">
             <img
               src="/user-avatar.jpg"
@@ -69,7 +57,6 @@ export default function Home() {
       </nav>
 
       <main className="container mx-auto p-4">
-        {/* Header Section */}
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-bold">My Notes</h2>
           <button
@@ -80,7 +67,6 @@ export default function Home() {
           </button>
         </div>
 
-        {/* Search Bar */}
         <div className="relative mb-6">
           <FiSearch className="absolute left-3 top-3 text-gray-400 dark:text-gray-500" />
           <input
@@ -96,23 +82,27 @@ export default function Home() {
           />
         </div>
 
-        {/* Notes Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredNotes.map((note) => (
             <div
               key={note.id}
               className={`p-4 rounded-lg shadow ${
                 darkMode ? "bg-gray-800 text-white" : "bg-white text-black"
-              }`}
+              } relative`}
             >
               <h3 className="font-bold mb-2">{note.title}</h3>
               <p>{note.content}</p>
+              <button
+                onClick={() => deleteNote(note.id)}
+                className="absolute top-2 right-2 text-red-500 hover:text-red-700"
+              >
+                <FiTrash2 size={18} />
+              </button>
             </div>
           ))}
         </div>
       </main>
 
-      {/* Modal for creating new notes */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
           <div className={`bg-white dark:bg-gray-800 p-6 rounded-lg w-96 ${darkMode ? "text-white" : "text-black"}`}>
