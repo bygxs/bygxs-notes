@@ -1,4 +1,4 @@
-// src/app/notes/[id]/page.tsx
+/* // src/app/notes/[id]/page.tsx
 import { useEffect, useState } from "react";
 import { useRouter } from 'next/navigation';
 
@@ -77,3 +77,4 @@ export async function getStaticPaths() {
 
   return { paths, fallback: true }; // or 'blocking' based on your needs
 }
+ */
