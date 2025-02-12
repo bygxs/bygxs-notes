@@ -1,7 +1,7 @@
 // app/page.tsx
 "use client";
 import { useState } from "react";
-import { FiPlus, FiSearch, FiMoon, FiSun, FiX, FiTrash2 } from "react-icons/fi";
+import { FiPlus, FiSearch, FiMoon, FiSun, FiX, FiTrash2, FiEdit } from "react-icons/fi";
 
 interface Note {
   id: number;
@@ -17,22 +17,31 @@ export default function Home() {
   ]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [newNote, setNewNote] = useState({ title: "", content: "" });
+  const [currentNote, setCurrentNote] = useState<Note | null>(null);
 
   const filteredNotes = notes.filter((note) =>
     note.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const addNote = () => {
-    if (newNote.title && newNote.content) {
-      setNotes([...notes, { id: Date.now(), ...newNote }]);
-      setNewNote({ title: "", content: "" });
+  const addOrUpdateNote = () => {
+    if (currentNote?.title && currentNote?.content) {
+      if (currentNote.id) {
+        setNotes(notes.map(note => note.id === currentNote.id ? currentNote : note));
+      } else {
+        setNotes([...notes, { ...currentNote, id: Date.now() }]);
+      }
       setIsModalOpen(false);
+      setCurrentNote(null);
     }
   };
 
   const deleteNote = (id: number) => {
     setNotes(notes.filter(note => note.id !== id));
+  };
+
+  const openEditModal = (note: Note) => {
+    setCurrentNote(note);
+    setIsModalOpen(true);
   };
 
   return (
@@ -60,7 +69,7 @@ export default function Home() {
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-bold">My Notes</h2>
           <button
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => {setCurrentNote({ id: 0, title: "", content: "" }); setIsModalOpen(true);}}
             className="bg-blue-500 text-white px-4 py-2 rounded-full flex items-center"
           >
             <FiPlus className="mr-2" /> New Note
@@ -98,6 +107,12 @@ export default function Home() {
               >
                 <FiTrash2 size={18} />
               </button>
+              <button
+                onClick={() => openEditModal(note)}
+                className="absolute top-2 right-8 text-blue-500 hover:text-blue-700"
+              >
+                <FiEdit size={18} />
+              </button>
             </div>
           ))}
         </div>
@@ -107,34 +122,34 @@ export default function Home() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
           <div className={`bg-white dark:bg-gray-800 p-6 rounded-lg w-96 ${darkMode ? "text-white" : "text-black"}`}>
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl font-bold">Create New Note</h3>
-              <button onClick={() => setIsModalOpen(false)} className="text-gray-500 hover:text-gray-700">
+              <h3 className="text-xl font-bold">{currentNote?.id ? "Edit Note" : "Create New Note"}</h3>
+              <button onClick={() => {setIsModalOpen(false); setCurrentNote(null);}} className="text-gray-500 hover:text-gray-700">
                 <FiX size={24} />
               </button>
             </div>
             <input
               type="text"
               placeholder="Note Title"
-              value={newNote.title}
-              onChange={(e) => setNewNote({ ...newNote, title: e.target.value })}
+              value={currentNote?.title || ""}
+              onChange={(e) => setCurrentNote({...currentNote!, title: e.target.value})}
               className={`w-full p-2 mb-4 border rounded ${
                 darkMode ? "bg-gray-700 text-white" : "bg-white text-black"
               }`}
             />
             <textarea
               placeholder="Note Content"
-              value={newNote.content}
-              onChange={(e) => setNewNote({ ...newNote, content: e.target.value })}
+              value={currentNote?.content || ""}
+              onChange={(e) => setCurrentNote({...currentNote!, content: e.target.value})}
               className={`w-full p-2 mb-4 border rounded ${
                 darkMode ? "bg-gray-700 text-white" : "bg-white text-black"
               }`}
               rows={4}
             />
             <button
-              onClick={addNote}
+              onClick={addOrUpdateNote}
               className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
             >
-              Add Note
+              {currentNote?.id ? "Update Note" : "Add Note"}
             </button>
           </div>
         </div>
