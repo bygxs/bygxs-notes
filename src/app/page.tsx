@@ -1,6 +1,6 @@
 // app/page.tsx
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FiPlus, FiSearch, FiMoon, FiSun, FiX, FiTrash2, FiEdit, FiTag } from "react-icons/fi";
 
 interface Note {
@@ -12,16 +12,24 @@ interface Note {
 
 export default function Home() {
   const [darkMode, setDarkMode] = useState(false);
-  const [notes, setNotes] = useState<Note[]>([
-    { id: 1, title: "First Note", content: "This is the first note.", tags: ["personal"] },
-    { id: 2, title: "Second Note", content: "This is the second note.", tags: ["work"] },
-  ]);
+  const [notes, setNotes] = useState<Note[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentNote, setCurrentNote] = useState<Note | null>(null);
   const [tagInput, setTagInput] = useState("");
 
-  const allTags = Array.from(new Set(notes.flatMap(note => note.tags)));
+  // Load notes from local storage on initial render
+  useEffect(() => {
+    const savedNotes = localStorage.getItem("notes");
+    if (savedNotes) {
+      setNotes(JSON.parse(savedNotes));
+    }
+  }, []);
+
+  // Save notes to local storage whenever they change
+  useEffect(() => {
+    localStorage.setItem("notes", JSON.stringify(notes));
+  }, [notes]);
 
   const filteredNotes = notes.filter((note) =>
     note.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -140,7 +148,7 @@ export default function Home() {
               </button>
               <button
                 onClick={() => openEditModal(note)}
-                className="absolute top-2 right-8 text-blue-500 hover:text-blue-700"
+                className="absolute top-2 right-[40px] text-blue-500 hover:text-blue-700"
               >
                 <FiEdit size={18} />
               </button>
@@ -151,10 +159,16 @@ export default function Home() {
 
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className={`bg-white dark:bg-gray-800 p-6 rounded-lg w-96 ${darkMode ? "text-white" : "text-black"}`}>
+          <div className={`bg-white dark:bg-gray-800 p-6 rounded-lg w-[400px] ${darkMode ? "text-white" : "text-black"}`}>
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-bold">{currentNote?.id ? "Edit Note" : "Create New Note"}</h3>
-              <button onClick={() => {setIsModalOpen(false); setCurrentNote(null);}} className="text-gray-500 hover:text-gray-700">
+              <button
+                onClick={() => {
+                  setIsModalOpen(false);
+                  setCurrentNote(null);
+                }}
+                className="text-gray-500 hover:text-gray-700"
+              >
                 <FiX size={24} />
               </button>
             </div>
@@ -162,7 +176,7 @@ export default function Home() {
               type="text"
               placeholder="Note Title"
               value={currentNote?.title || ""}
-              onChange={(e) => setCurrentNote({...currentNote!, title: e.target.value})}
+              onChange={(e) => setCurrentNote({ ...currentNote!, title: e.target.value })}
               className={`w-full p-2 mb-4 border rounded ${
                 darkMode ? "bg-gray-700 text-white" : "bg-white text-black"
               }`}
@@ -170,7 +184,7 @@ export default function Home() {
             <textarea
               placeholder="Note Content"
               value={currentNote?.content || ""}
-              onChange={(e) => setCurrentNote({...currentNote!, content: e.target.value})}
+              onChange={(e) => setCurrentNote({ ...currentNote!, content: e.target.value })}
               className={`w-full p-2 mb-4 border rounded ${
                 darkMode ? "bg-gray-700 text-white" : "bg-white text-black"
               }`}
@@ -195,9 +209,15 @@ export default function Home() {
             </div>
             <div className="flex flex-wrap gap-2 mb-4">
               {currentNote?.tags.map((tag, index) => (
-                <span key={index} className="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 flex items-center">
+                <span
+                  key={index}
+                  className="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 flex items-center"
+                >
                   {tag}
-                  <button onClick={() => removeTag(tag)} className="ml-1 text-red-500 hover:text-red-700">
+                  <button
+                    onClick={() => removeTag(tag)}
+                    className="ml-1 text-red-500 hover:text-red-700"
+                  >
                     <FiX size={14} />
                   </button>
                 </span>
