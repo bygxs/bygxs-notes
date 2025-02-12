@@ -1,26 +1,31 @@
 // app/page.tsx
 "use client";
 import { useState } from "react";
-import { FiPlus, FiSearch, FiMoon, FiSun, FiX, FiTrash2, FiEdit } from "react-icons/fi";
+import { FiPlus, FiSearch, FiMoon, FiSun, FiX, FiTrash2, FiEdit, FiTag } from "react-icons/fi";
 
 interface Note {
   id: number;
   title: string;
   content: string;
+  tags: string[];
 }
 
 export default function Home() {
   const [darkMode, setDarkMode] = useState(false);
   const [notes, setNotes] = useState<Note[]>([
-    { id: 1, title: "First Note", content: "This is the first note." },
-    { id: 2, title: "Second Note", content: "This is the second note." },
+    { id: 1, title: "First Note", content: "This is the first note.", tags: ["personal"] },
+    { id: 2, title: "Second Note", content: "This is the second note.", tags: ["work"] },
   ]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentNote, setCurrentNote] = useState<Note | null>(null);
+  const [tagInput, setTagInput] = useState("");
+
+  const allTags = Array.from(new Set(notes.flatMap(note => note.tags)));
 
   const filteredNotes = notes.filter((note) =>
-    note.title.toLowerCase().includes(searchQuery.toLowerCase())
+    note.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    note.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
   const addOrUpdateNote = () => {
@@ -28,7 +33,7 @@ export default function Home() {
       if (currentNote.id) {
         setNotes(notes.map(note => note.id === currentNote.id ? currentNote : note));
       } else {
-        setNotes([...notes, { ...currentNote, id: Date.now() }]);
+        setNotes([...notes, { ...currentNote, id: Date.now(), tags: [] }]);
       }
       setIsModalOpen(false);
       setCurrentNote(null);
@@ -42,6 +47,25 @@ export default function Home() {
   const openEditModal = (note: Note) => {
     setCurrentNote(note);
     setIsModalOpen(true);
+  };
+
+  const addTag = () => {
+    if (tagInput && currentNote) {
+      setCurrentNote({
+        ...currentNote,
+        tags: [...new Set([...currentNote.tags, tagInput.toLowerCase()])]
+      });
+      setTagInput("");
+    }
+  };
+
+  const removeTag = (tagToRemove: string) => {
+    if (currentNote) {
+      setCurrentNote({
+        ...currentNote,
+        tags: currentNote.tags.filter(tag => tag !== tagToRemove)
+      });
+    }
   };
 
   return (
@@ -69,7 +93,7 @@ export default function Home() {
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-bold">My Notes</h2>
           <button
-            onClick={() => {setCurrentNote({ id: 0, title: "", content: "" }); setIsModalOpen(true);}}
+            onClick={() => {setCurrentNote({ id: 0, title: "", content: "", tags: [] }); setIsModalOpen(true);}}
             className="bg-blue-500 text-white px-4 py-2 rounded-full flex items-center"
           >
             <FiPlus className="mr-2" /> New Note
@@ -80,7 +104,7 @@ export default function Home() {
           <FiSearch className="absolute left-3 top-3 text-gray-400 dark:text-gray-500" />
           <input
             type="text"
-            placeholder="Search notes..."
+            placeholder="Search notes or tags..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className={`w-full pl-10 pr-4 py-2 rounded-full border focus:outline-none focus:ring ${
@@ -100,7 +124,14 @@ export default function Home() {
               } relative`}
             >
               <h3 className="font-bold mb-2">{note.title}</h3>
-              <p>{note.content}</p>
+              <p className="mb-2">{note.content}</p>
+              <div className="flex flex-wrap gap-1 mb-2">
+                {note.tags.map((tag, index) => (
+                  <span key={index} className="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800">
+                    {tag}
+                  </span>
+                ))}
+              </div>
               <button
                 onClick={() => deleteNote(note.id)}
                 className="absolute top-2 right-2 text-red-500 hover:text-red-700"
@@ -145,6 +176,33 @@ export default function Home() {
               }`}
               rows={4}
             />
+            <div className="flex mb-4">
+              <input
+                type="text"
+                placeholder="Add tag"
+                value={tagInput}
+                onChange={(e) => setTagInput(e.target.value)}
+                className={`flex-grow p-2 border rounded-l ${
+                  darkMode ? "bg-gray-700 text-white" : "bg-white text-black"
+                }`}
+              />
+              <button
+                onClick={addTag}
+                className="bg-blue-500 text-white px-4 py-2 rounded-r hover:bg-blue-600"
+              >
+                <FiTag />
+              </button>
+            </div>
+            <div className="flex flex-wrap gap-2 mb-4">
+              {currentNote?.tags.map((tag, index) => (
+                <span key={index} className="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 flex items-center">
+                  {tag}
+                  <button onClick={() => removeTag(tag)} className="ml-1 text-red-500 hover:text-red-700">
+                    <FiX size={14} />
+                  </button>
+                </span>
+              ))}
+            </div>
             <button
               onClick={addOrUpdateNote}
               className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
