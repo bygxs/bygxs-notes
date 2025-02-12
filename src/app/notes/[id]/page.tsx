@@ -1,5 +1,4 @@
-// app/notes/[id]/page.tsx
-"use client";
+// src/app/notes/[id]/page.tsx
 import { useEffect, useState } from "react";
 import { useRouter } from 'next/navigation';
 
@@ -10,25 +9,21 @@ interface Note {
   tags: string[];
 }
 
-export default function NoteDetailPage({ params }: { params: { id: string } }) {
-  const [note, setNote] = useState<Note | null>(null);
-  const { id } = params;
+interface NoteDetailPageProps {
+  params: {
+    id: string;
+  };
+  note: Note | null;
+}
+
+export default function NoteDetailPage({ params, note }: NoteDetailPageProps) {
   const router = useRouter();
 
   useEffect(() => {
-    const savedNotes = localStorage.getItem("notes");
-    if (savedNotes) {
-      const notesArray: Note[] = JSON.parse(savedNotes);
-      const foundNote = notesArray.find((note) => note.id === Number(id));
-      if (foundNote) {
-        setNote(foundNote);
-      } else {
-        router.push('/');
-      }
-    } else {
+    if (!note) {
       router.push('/');
     }
-  }, [id, router]);
+  }, [note, router]);
 
   if (!note) {
     return <div>Loading...</div>;
@@ -50,4 +45,35 @@ export default function NoteDetailPage({ params }: { params: { id: string } }) {
       </div>
     </div>
   );
+}
+
+// Fetching the note data based on the id
+export async function getStaticProps({ params }: { params: { id: string } }) {
+  const savedNotes = localStorage.getItem("notes");
+  let note: Note | null = null;
+
+  if (savedNotes) {
+    const notesArray: Note[] = JSON.parse(savedNotes);
+    note = notesArray.find((n) => n.id === Number(params.id)) || null;
+  }
+
+  return {
+    props: {
+      params,
+      note,
+    },
+  };
+}
+
+// This function is required for dynamic routes
+export async function getStaticPaths() {
+  // You can fetch the list of notes here to generate paths
+  const savedNotes = localStorage.getItem("notes");
+  const notesArray: Note[] = savedNotes ? JSON.parse(savedNotes) : [];
+
+  const paths = notesArray.map((note) => ({
+    params: { id: note.id.toString() },
+  }));
+
+  return { paths, fallback: true }; // or 'blocking' based on your needs
 }

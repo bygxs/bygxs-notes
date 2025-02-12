@@ -77,9 +77,9 @@ export default function Home() {
   };
 
   return (
-    <div className={`min-h-screen ${darkMode ? "bg-gray-900 text-white" : "bg-gray-100"}`}>
+    <div className={`min-h-screen ${darkMode ? "bg-gray-900 text-white" : "bg-gray-500"}`}>
       <nav className="flex justify-between items-center p-4">
-        <h1 className="text-2xl font-bold">NoteApp</h1>
+        <h1 className="items-end justify-end text-2xl font-bold text-gray-800 dark:text-gray-200  text-right" >NoteApp</h1>
         <div className="flex items-center space-x-4">
           <button
             onClick={() => setDarkMode(!darkMode)}
@@ -99,7 +99,7 @@ export default function Home() {
 
       <main className="container mx-auto p-4">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-bold">My Notes</h2>
+          <h2 className="text-xl font-bold"></h2>
           <button
             onClick={() => {setCurrentNote({ id: 0, title: "", content: "", tags: [] }); setIsModalOpen(true);}}
             className="bg-blue-500 text-white px-4 py-2 rounded-full flex items-center"
