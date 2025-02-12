@@ -1,38 +1,25 @@
-// src/components/Navbar.tsx
+// src/components/BottomNav.tsx
+"use client";
 
-import { FiMoon, FiSun } from "react-icons/fi";
+import Link from "next/link";
+import { FiHome, FiEdit, FiSettings } from "react-icons/fi";
 
-export default function Navbar({
-  darkMode,
-  setDarkMode,
-}: {
-  darkMode: boolean;
-  setDarkMode: (value: boolean) => void;
-}) {
+export default function BottomNav() {
   return (
-    <nav
-      className={`flex justify-between items-center p-4 ${
-        darkMode ? "bg-gray-900 text-white" : "bg-gray-100"
-      }`}
-    >
-      <h1 className="text-2xl font-bold">NoteApp</h1>
-      <div className="flex items-center space-x-4">
-        {/* Dark/Light Mode Toggle */}
-        <button
-          onClick={() => setDarkMode(!darkMode)}
-          className="p-2 rounded-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700"
-        >
-          {darkMode ? <FiSun size={20} /> : <FiMoon size={20} />}
-        </button>
-
-        {/* User Avatar Placeholder */}
-        <div className="w-10 h-10 bg-gray-300 rounded-full overflow-hidden cursor-pointer">
-          <img
-            src="/user-avatar.jpg" // Replace with your avatar image
-            alt="User Avatar"
-            className="w-full h-full object-cover"
-          />
-        </div>
+    <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 shadow-lg">
+      <div className="flex justify-around items-center h-16">
+        <Link href="/" className="flex flex-col items-center">
+          <FiHome size={24} />
+          <span className="text-xs mt-1">Home</span>
+        </Link>
+        <Link href="/notes" className="flex flex-col items-center">
+          <FiEdit size={24} />
+          <span className="text-xs mt-1">Notes</span>
+        </Link>
+        <Link href="/settings" className="flex flex-col items-center">
+          <FiSettings size={24} />
+          <span className="text-xs mt-1">Settings</span>
+        </Link>
       </div>
     </nav>
   );

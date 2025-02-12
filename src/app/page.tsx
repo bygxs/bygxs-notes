@@ -78,8 +78,10 @@ export default function Home() {
 
   return (
     <div className={`min-h-screen ${darkMode ? "bg-gray-900 text-white" : "bg-gray-500"}`}>
+
+
       <nav className="flex justify-between items-center p-4">
-        <h1 className="items-end justify-end text-2xl font-bold text-gray-800 dark:text-gray-200  text-right" >NoteApp</h1>
+        <h1 className="items-end justify-end text-2xl font-bold text-gray-800 dark:text-gray-200  text-right" >NoteApp</h1> 
         <div className="flex items-center space-x-4">
           <button
             onClick={() => setDarkMode(!darkMode)}
@@ -87,13 +89,14 @@ export default function Home() {
           >
             {darkMode ? <FiSun size={20} /> : <FiMoon size={20} />}
           </button>
+
           <div className="w-10 h-10 bg-gray-300 rounded-full overflow-hidden cursor-pointer">
             <img
               src="/user-avatar.jpg"
               alt="User Avatar"
               className="w-full h-full object-cover"
             />
-          </div>
+          </div> 
         </div>
       </nav>
 
