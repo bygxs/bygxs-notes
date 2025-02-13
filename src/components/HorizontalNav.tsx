@@ -1,5 +1,3 @@
-// src/components/HorizontalNav.tsx
-
 import React, { useState } from "react";
 import Link from "next/link";
 
@@ -51,55 +49,76 @@ const HorizontalNav: React.FC<HorizontalNavProps> = ({
           </li>
         ))}
       </ul>
-      {hoveredMenu === "Styles" && (
+      {hoveredMenu && (
         <div className="mt-2 py-2 bg-purple-600 shadow-md">
           <ul className="flex flex-row justify-start items-start overflow-x-auto whitespace-nowrap">
-            <li
-              className="relative"
-              onMouseEnter={() => setHoveredSubMenu("myArt")}
-              onMouseLeave={() => setHoveredSubMenu(null)}
-            >
-              <button className="px-4 py-2 text-sm text-blue-200 hover:text-pink-300">
-                myArt
-              </button>
-              {hoveredSubMenu === "myArt" && (
-                <ul className="bg-purple-800 mt-1">
-                  {myArt.map((art) => (
-                    <li key={art}>
-                      <Link
-                        href={`/art/myArt/${art.toLowerCase().replace(/\s+/g, "-")}`}
-                        className="px-4 py-2 text-sm text-blue-200 hover:text-pink-300"
-                      >
-                        {art}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </li>
-            <li
-              className="relative"
-              onMouseEnter={() => setHoveredSubMenu("museumsArt")}
-              onMouseLeave={() => setHoveredSubMenu(null)}
-            >
-              <button className="px-4 py-2 text-sm text-blue-200 hover:text-pink-300">
-                museumsArt
-              </button>
-              {hoveredSubMenu === "museumsArt" && (
-                <ul className="bg-purple-800 mt-1">
-                  {museumsArt.map((art) => (
-                    <li key={art}>
-                      <Link
-                        href={`/art/museumsArt/${art.toLowerCase().replace(/\s+/g, "-")}`}
-                        className="px-4 py-2 text-sm text-blue-200 hover:text-pink-300"
-                      >
-                        {art}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </li>
+            {hoveredMenu === "Styles" ? (
+              <>
+                <li
+                  className="relative"
+                  onMouseEnter={() => setHoveredSubMenu("myArt")}
+                  onMouseLeave={() => setHoveredSubMenu(null)}
+                >
+                  <button className="px-4 py-2 text-sm text-blue-200 hover:text-pink-300">
+                    My Art
+                  </button>
+                  {hoveredSubMenu === "myArt" && (
+                    <ul className="bg-purple-800 mt-1">
+                      {myArt.map((art) => (
+                        <li key={art}>
+                          <Link
+                            href={`/art/myArt/${art
+                              .toLowerCase()
+                              .replace(/\s+/g, "-")}`}
+                            className="px-4 py-2 text-sm text-blue-200 hover:text-pink-300"
+                          >
+                            {art}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+                <li
+                  className="relative"
+                  onMouseEnter={() => setHoveredSubMenu("museumsArt")}
+                  onMouseLeave={() => setHoveredSubMenu(null)}
+                >
+                  <button className="px-4 py-2 text-sm text-blue-200 hover:text-pink-300">
+                    Museums Art
+                  </button>
+                  {hoveredSubMenu === "museumsArt" && (
+                    <ul className="bg-purple-800 mt-1">
+                      {museumsArt.map((art) => (
+                        <li key={art}>
+                          <Link
+                            href={`/art/museumsArt/${art
+                              .toLowerCase()
+                              .replace(/\s+/g, "-")}`}
+                            className="px-4 py-2 text-sm text-blue-200 hover:text-pink-300"
+                          >
+                            {art}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              </>
+            ) : (
+              menuItems[hoveredMenu].map((subItem) => (
+                <li key={subItem}>
+                  <Link
+                    href={`/${hoveredMenu.toLowerCase()}/${subItem
+                      .toLowerCase()
+                      .replace(/\s+/g, "-")}`}
+                    className="px-4 py-2 text-sm text-blue-200 hover:text-pink-300"
+                  >
+                    {subItem}
+                  </Link>
+                </li>
+              ))
+            )}
           </ul>
         </div>
       )}

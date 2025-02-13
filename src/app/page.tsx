@@ -76,15 +76,16 @@ export default function Home() {
   }, [isAuthModalOpen]);
 
   const menuItems = {
-    Trends: ["Gen Z", "Boomer", "Millennial", "Gen X"],
+    Journal: ["Gen Z", "Boomer", "Millennial", "Gen X"],
     Styles: [" ", " "],
     Write: ["BuJo-bullet journaling", "Self Care", "Soul Rebel"],
     Movements: ["Expression", "Impression", "Real Natural", "Abstract"],
     Bookings: ["Book Appointment", "View Schedule", "Manage Bookings"],
   };
 
-  const womenStyles = ["Wood Cut", "Carvings", "Sclupture"];
-  const menStyles = ["Painting", "Mixed media"];
+  // Define styles for myArt and museumsArt
+  const myArt = ["Wood Cut", "Carvings", "Sculpture"]; // Items for myArt
+  const museumsArt = ["Painting", "Mixed media"]; // Items for museumsArt
 
   return (
     <div
@@ -123,8 +124,8 @@ export default function Home() {
       <HorizontalNav
         isDarkMode={isDarkMode}
         menuItems={menuItems}
-        womenStyles={womenStyles}
-        menStyles={menStyles}
+        myArt={myArt} // Pass myArt instead of womenStyles
+        museumsArt={museumsArt} // Pass museumsArt instead of menStyles
       />
 
       {/* Main Content */}
