@@ -1,8 +1,9 @@
+"use client";
 import React from "react";
 import { useAuth } from "@/hooks/useAuth"; // Adjust path to your useAuth hook
-import { signOut } from "firebase/auth";
-import { auth } from "@/lib/firebase"; // Adjust path if necessary
-import { useRouter } from "next/router"; // Import router for redirection
+// import { signOut } from "firebase/auth";
+// import { auth } from "@/lib/firebase"; // Adjust path if necessary
+// import { useRouter } from "next/router"; // Import router for redirection
 
 interface HeaderProps {
   isDarkMode: boolean;
@@ -16,16 +17,17 @@ const Header: React.FC<HeaderProps> = ({
   handleAuthClick,
 }) => {
   const { user } = useAuth(); // Get user from auth hook
-  const router = useRouter(); // To redirect after sign out
+  // const router = useRouter(); // To redirect after sign out
 
-  const handleSignOut = async () => {
-    try {
-      await signOut(auth);
-      router.push("/"); // Redirect to home after sign out
-    } catch (error) {
-      console.error("Error signing out:", error);
-    }
-  };
+  // const handleSignOut = async () => {
+  //   try {
+  //     await signOut(auth);
+  //     // router.push("/"); // Redirect to home after sign out
+  //     // window.location.href = "/"; // Alternative redirection method
+  //   } catch (error) {
+  //     console.error("Error signing out:", error);
+  //   }
+  // };
 
   return (
     <header
@@ -44,14 +46,14 @@ const Header: React.FC<HeaderProps> = ({
         </div>
 
         {/* Conditionally render Sign Out button */}
-        {user && (
+        {/* {user && (
           <button
             onClick={handleSignOut}
             className="text-lg text-red-500 hover:text-red-700"
           >
             Sign Out
           </button>
-        )}
+        )} */}
 
         {/* Hamburger Menu */}
         <div className="text-2xl cursor-pointer" onClick={toggleMenu}>
