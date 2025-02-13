@@ -1,5 +1,8 @@
 import React from "react";
 import Link from "next/link";
+import { useAuth } from "@/hooks/useAuth";  // Import the custom hook for authentication
+import { signOut } from "firebase/auth";  // Firebase sign out method
+import { auth } from "@/lib/firebase";  // Firebase auth instance
 
 interface HamburgerMenuProps {
   isDarkMode: boolean;
@@ -12,6 +15,18 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
   isMenuOpen,
   toggleMenu,
 }) => {
+  const { user } = useAuth();  // Get the user from the useAuth hook
+  
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);  // Sign out logic using Firebase
+      console.log("Signed out successfully");
+      // Optionally, you can redirect the user or show a message
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  };
+
   return (
     <nav
       className={`fixed top-0 left-0 bottom-0 w-64 ${
@@ -23,54 +38,9 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
       <button onClick={toggleMenu} className="absolute top-4 right-4 text-2xl">
         &times;
       </button>
-      {["Profile", "Bookings", "Artworks", "Self Care", "Settings"].map(
-        (item) => (
-          <Link
-            key={item}
-            href={`/${item.toLowerCase()}`}
-            className="block py-2 hover:text-purple-600"
-          >
-            {item}
-          </Link>
-        )
-      )}
-    </nav>
-  );
-};
-
-export default HamburgerMenu;
-
-/* 
-
-
-  import React from "react";
-import Link from "next/link";
-
-interface HamburgerMenuProps {
-  isDarkMode: boolean; // Indicates if dark mode is enabled
-  isMenuOpen: boolean; // Indicates if the menu is open
-  toggleMenu: () => void; // Function to toggle the menu visibility
-}
-
-const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
-  isDarkMode,
-  isMenuOpen,
-  toggleMenu,
-}) => {
-  return (
-    <nav
-      className={`fixed top-0 right-0 bottom-0 w-64 ${
-        isDarkMode ? "bg-gray-800" : "bg-white"
-      } p-4 transition-transform duration-300 ease-in-out z-50 ${
-        isMenuOpen ? "translate-x-0" : "translate-x-full" // Change to translate-x-full for right side
-      }`}
-    >
       
-      <button onClick={toggleMenu} className="absolute top-4 left-4 text-2xl">
-        &times; 
-      </button>
-   
-      {["Profile", "Bookings", "Artworks", "Self Care", "Settings"].map((item) => (
+      {/* Links */}
+      {["About", "Contact", "Service", "Privacy", "Settings"].map((item) => (
         <Link
           key={item}
           href={`/${item.toLowerCase()}`}
@@ -79,9 +49,18 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
           {item}
         </Link>
       ))}
+
+      {/* Conditionally render Sign Out button if user is logged in */}
+      {user ? (
+        <button
+          onClick={handleSignOut}  // Trigger sign-out when clicked
+          className="block py-2 text-red-500 hover:text-red-700"
+        >
+          Sign Out
+        </button>
+      ) : null}
     </nav>
   );
 };
 
 export default HamburgerMenu;
- */
