@@ -4,7 +4,7 @@
 import Link from "next/link";
 import { FaList } from "react-icons/fa";
 import { FiHome, FiEdit, FiSettings } from "react-icons/fi";
-import { Navigation } from "./NavigationInternal";
+import { Navigation } from "./InternalHamMenu";
 
 export default function BottomNav() {
   return (

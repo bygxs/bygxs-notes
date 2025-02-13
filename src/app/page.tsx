@@ -10,7 +10,7 @@ import Hero from "@/components/Hero";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import MainContent from "@/components/MainContent";
-import HamburgerMenu from "@/components/HamburgerMenu";
+import HamburgerMenu from "@/components/ExternalHamMenu";
 import HorizontalNav from "@/components/HorizontalNav";
 
 export default function Home() {

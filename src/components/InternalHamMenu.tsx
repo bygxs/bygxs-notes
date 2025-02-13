@@ -1,14 +1,20 @@
-// app/components/Navigation.tsx
 "use client";
 
 import { useState } from "react";
 import Link from "next/link";
+import { useAuth } from "@/hooks/useAuth"; // Importing the useAuth hook
 
-export function Navigation() {
+export function HamburgerMenu() {
   const [isOpen, setIsOpen] = useState(false);
+  const { user } = useAuth(); // Get the user status from useAuth
+
+  const handleSignOut = () => {
+    // Handle sign-out logic here, e.g. Firebase sign-out
+    console.log("User signed out");
+  };
 
   return (
-    <nav className="fixed top-4 right-4 z-50">
+    <nav className="fixed top-0 left-0 bottom-0 w-64 bg-white p-4 transition-transform duration-300 ease-in-out z-50">
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="p-2 bg-gray-800 text-white rounded-full"
@@ -30,9 +36,11 @@ export function Navigation() {
           />
         </svg>
       </button>
+
       {isOpen && (
         <div className="absolute top-full right-0 mt-2 w-48 bg-white shadow-lg rounded-md overflow-hidden">
           <ul className="py-1">
+            {/* List of Links */}
             <li>
               <Link
                 href="/"
@@ -49,8 +57,6 @@ export function Navigation() {
                 Journal
               </Link>
             </li>
-
-            {/* Add the link to Check  Drawing App */}
             <li>
               <Link
                 href="/drawing"
@@ -59,8 +65,6 @@ export function Navigation() {
                 Drawing App
               </Link>
             </li>
-
-            {/* Add other existing links */}
             <li>
               <Link
                 href="/gallery"
@@ -69,34 +73,30 @@ export function Navigation() {
                 Art Show
               </Link>
             </li>
-
             <li>
               <Link
                 href="/todo"
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
               >
-                intentions todo
+                Intentions To Do
               </Link>
             </li>
-
             <li>
               <Link
-                href="/calander"
+                href="/calendar"
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
               >
-                calander
+                Calendar
               </Link>
             </li>
-
             <li>
               <Link
                 href="/chat"
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
               >
-                chat
+                Chat
               </Link>
             </li>
-
             <li>
               <Link
                 href="/stories"
@@ -105,7 +105,6 @@ export function Navigation() {
                 Stories
               </Link>
             </li>
-
             <li>
               <Link
                 href="/podcast"
@@ -119,12 +118,19 @@ export function Navigation() {
                 href="/privacy"
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
               >
-                privacy
+                Privacy
               </Link>
             </li>
 
-
-
+            {/* Conditionally render Sign Out button if the user is logged in */}
+            {user && (
+              <button
+                onClick={handleSignOut}
+                className="block px-4 py-2 text-sm text-red-500 hover:bg-red-100"
+              >
+                Sign Out
+              </button>
+            )}
           </ul>
         </div>
       )}
