@@ -186,20 +186,19 @@ export default function Home() {
 
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div
-            className={`bg-white dark:bg-gray-800 p-8 rounded-lg w-full sm:w-[500px] lg:w-[600px] min-h-[500px] ${
-              darkMode ? "text-white" : "text-black"
-            }`}
-          >
-            <button
-              onClick={() => {
-                setIsModalOpen(false);
-                setCurrentNote(null);
-              }}
-              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
-            >
-              <FiX size={24} />
-            </button>
+          <div className={`bg-white dark:bg-gray-800 p-6 rounded-lg w-[400px] ${darkMode ? "text-white" : "text-black"}`}>
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold">{currentNote?.id ? "Edit Note" : "Create New Note"}</h3>
+              <button
+                onClick={() => {
+                  setIsModalOpen(false);
+                  setCurrentNote(null);
+                }}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <FiX size={24} />
+              </button>
+            </div>
             <input
               type="text"
               placeholder="Note Title"

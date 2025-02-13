@@ -8,14 +8,14 @@ export default function NoteForm({ onSubmit }: { onSubmit: (title: string, conte
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title || !content) return; // Prevent empty submissions
-    onSubmit(title, content);
+    if (!title) return; // Prevent empty title submissions
+    onSubmit(title, content); // Submit title and content (content can be empty)
     setTitle("");
     setContent("");
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+    <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow max-w-full sm:max-w-md mx-auto"> {/* Full width on small screens */}
       <div className="mb-4">
         <label htmlFor="title" className="block font-bold mb-1">
           Title
@@ -39,7 +39,7 @@ export default function NoteForm({ onSubmit }: { onSubmit: (title: string, conte
           onChange={(e) => setContent(e.target.value)}
           rows={5}
           className="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:ring-blue-500"
-          placeholder="Enter note content"
+          placeholder="Enter note content (optional)" // Updated placeholder
         />
       </div>
       <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
