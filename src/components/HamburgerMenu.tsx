@@ -1,5 +1,3 @@
-// app/components/HamburgerMenu.tsx
-
 import React from "react";
 import Link from "next/link";
 
@@ -25,6 +23,53 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
       <button onClick={toggleMenu} className="absolute top-4 right-4 text-2xl">
         &times;
       </button>
+      {["Profile", "Bookings", "Artworks", "Self Care", "Settings"].map(
+        (item) => (
+          <Link
+            key={item}
+            href={`/${item.toLowerCase()}`}
+            className="block py-2 hover:text-purple-600"
+          >
+            {item}
+          </Link>
+        )
+      )}
+    </nav>
+  );
+};
+
+export default HamburgerMenu;
+
+/* 
+
+
+  import React from "react";
+import Link from "next/link";
+
+interface HamburgerMenuProps {
+  isDarkMode: boolean; // Indicates if dark mode is enabled
+  isMenuOpen: boolean; // Indicates if the menu is open
+  toggleMenu: () => void; // Function to toggle the menu visibility
+}
+
+const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
+  isDarkMode,
+  isMenuOpen,
+  toggleMenu,
+}) => {
+  return (
+    <nav
+      className={`fixed top-0 right-0 bottom-0 w-64 ${
+        isDarkMode ? "bg-gray-800" : "bg-white"
+      } p-4 transition-transform duration-300 ease-in-out z-50 ${
+        isMenuOpen ? "translate-x-0" : "translate-x-full" // Change to translate-x-full for right side
+      }`}
+    >
+      
+      <button onClick={toggleMenu} className="absolute top-4 left-4 text-2xl">
+        &times; 
+      </button>
+   
       {["Profile", "Bookings", "Artworks", "Self Care", "Settings"].map((item) => (
         <Link
           key={item}
@@ -39,3 +84,4 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({
 };
 
 export default HamburgerMenu;
+ */
