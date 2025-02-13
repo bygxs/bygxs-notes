@@ -18,9 +18,9 @@ export default function BottomNav() {
           <span className="text-xs mt-1">Notes</span>
         </Link>
         <Link href="/notes-list" className="flex flex-col items-center">
-  <FaList size={24} />
-  <span className="text-xs mt-1">Notes List</span>
-</Link>
+          <FaList size={24} />
+          <span className="text-xs mt-1">Notes List</span>
+        </Link>
         <Link href="/settings" className="flex flex-col items-center">
           <FiSettings size={24} />
           <span className="text-xs mt-1">Settings</span>
