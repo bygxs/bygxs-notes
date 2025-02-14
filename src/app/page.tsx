@@ -76,16 +76,19 @@ export default function Home() {
   }, [isAuthModalOpen]);
 
   const menuItems = {
-    Journal: ["Gen Z", "Boomer", "Millennial", "Gen X"],
+    News: ["Gen Z", "Boomer", "Millennial", "Gen X"],
     Styles: [" ", " "],
-    Write: ["BuJo-bullet journaling", "Self Care", "Soul Rebel"],
-    Movements: ["Expression", "Impression", "Real Natural", "Abstract"],
-    Bookings: ["Book Appointment", "View Schedule", "Manage Bookings"],
+    Journal: ["BuJo-bullet journaling", "Self Care", "Soul Rebel"],
+    Art: ["Expression", "Impression", "Real Natural", "Abstract"],
+    Book: ["Book Appointment", "View Schedule", "Manage Bookings"],
+    ToDo: ["Expression", "Impression", "Real Natural", "Abstract"],
+    chat: ["Book Appointment", "View Schedule", "Manage Bookings"],
+    Chatbot: ["Book Appointment", "View Schedule", "Manage Bookings"],
   };
 
   // Define styles for myArt and museumsArt
-  const myArt = ["Wood Cut", "Carvings", "Sculpture"]; // Items for myArt
-  const museumsArt = ["Painting", "Mixed media"]; // Items for museumsArt
+  const myArt = ["Drawing", "Painting", "Carve", "Sculpture"]; // Items for myArt
+  const museumsArt = ["chicago Art","Painting", "Mixed media"]; // Items for museumsArt
 
   return (
     <div
